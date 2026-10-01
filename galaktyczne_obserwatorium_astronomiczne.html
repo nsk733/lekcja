@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galaktyczne Obserwatorium Astronomiczne – Portal Odkryć Kosmicznych</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        space: {
+                            900: '#070b19',
+                            800: '#0f172a',
+                            700: '#1e293b',
+                            600: '#334155',
+                        },
+                        neon: {
+                            blue: '#38bdf8',
+                            purple: '#c084fc',
+                            gold: '#facc15',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #070b19;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .glow-text {
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+        }
+        .glow-gold {
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+        }
+        .nebula-card:hover .nebula-img {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen font-sans selection:bg-neon-blue selection:text-space-900">
+
+    <canvas id="starfield"></canvas>
+
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center space-x-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-neon-blue to-neon-purple flex items-center justify-center text-space-900 font-bold text-xl shadow-lg shadow-neon-blue/20 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-meteor text-white"></i>
+                </div>
+                <span class="font-extrabold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-white via-neon-blue to-neon-purple bg-clip-text text-transparent">
+                    AstroPortal
+                </span>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+                <a href="#hero" class="hover:text-neon-blue transition-colors">Start</a>
+                <a href="#odkrycie" class="hover:text-neon-blue transition-colors">Ciekawostki</a>
+                <a href="#galeria" class="hover:text-neon-blue transition-colors">Galeria</a>
+                <a href="#symulator" class="hover:text-neon-blue transition-colors">Symulator Wagi</a>
+                <a href="#newsletter" class="hover:text-neon-blue transition-colors">Biuletyn</a>
+            </nav>
+
+            <div class="flex items-center space-x-4">
+                <a href="#newsletter" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-space-900 bg-gradient-to-r from-neon-blue to-neon-purple rounded-xl shadow-lg shadow-neon-blue/20 hover:opacity-90 transition-opacity">
+                    Dołącz do Misji
+                </a>
+                <button id="mobile-menu-btn" class="md:hidden text-slate-300 hover:text-white p-2">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-4 pt-2 pb-6 space-y-3 glass-panel border-t border-slate-800">
+            <a href="#hero" class="block text-slate-300 hover:text-neon-blue py-1">Start</a>
+            <a href="#odkrycie" class="block text-slate-300 hover:text-neon-blue py-1">Ciekawostki</a>
+            <a href="#galeria" class="block text-slate-300 hover:text-neon-blue py-1">Galeria</a>
+            <a href="#symulator" class="block text-slate-300 hover:text-neon-blue py-1">Symulator Wagi</a>
+            <a href="#newsletter" class="block text-slate-300 hover:text-neon-blue py-1">Biuletyn</a>
+        </div>
+    </header>
+
+    <main class="relative z-10">
+        <section id="hero" class="pt-20 pb-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+            <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-slate-800/60 border border-neon-blue/30 text-neon-blue text-xs sm:text-sm font-semibold mb-6 shadow-inner">
+                <span class="w-2 h-2 rounded-full bg-neon-blue animate-pulse"></span>
+                <span>Oficjalny Portal Badań Wszechświata</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-4xl mx-auto mb-6 leading-tight">
+                Odkryj tajemnice <span class="bg-gradient-to-r from-neon-blue via-neon-purple to-neon-gold bg-clip-text text-transparent glow-text">niezmierzonego kosmosu</span>
+            </h1>
+            
+            <p class="text-slate-400 text-base sm:text-xl max-w-2xl mx-auto mb-10">
+                Wkrocz do Galaktycznego Obserwatorium. Śledź najnowsze misje, badaj odległe mgławice i poznawaj fascynujące zakątki galaktyki.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="#odkrycie" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-neon-blue to-neon-purple text-space-900 font-bold shadow-xl shadow-neon-blue/25 hover:scale-105 transition-transform flex items-center justify-center space-x-3">
+                    <span>Rozpocznij Eksplorację</span>
+                    <i class="fa-solid fa-arrow-down"></i>
+                </a>
+                <a href="#symulator" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-white font-semibold hover:border-neon-blue/50 transition-colors flex items-center justify-center space-x-3">
+                    <span>Symulator Wagi</span>
+                    <i class="fa-solid fa-weight-scale"></i>
+                </a>
+            </div>
+
+            <!-- Countdown Timer Card -->
+            <div class="max-w-3xl mx-auto glass-panel p-6 sm:p-8 rounded-3xl shadow-2xl border border-slate-700/50">
+                <h3 class="text-sm font-semibold uppercase tracking-widest text-neon-gold glow-gold mb-4">
+                    <i class="fa-solid fa-rocket mr-2"></i> Odliczanie do kolejnej misji kosmicznej (Artemis V)
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                        <div id="days" class="text-3xl sm:text-4xl font-extrabold text-white">00</div>
+                        <div class="text-xs uppercase text-slate-400 mt-1">Dni</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                        <div id="hours" class="text-3xl sm:text-4xl font-extrabold text-white">00</div>
+                        <div class="text-xs uppercase text-slate-400 mt-1">Godzin</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                        <div id="minutes" class="text-3xl sm:text-4xl font-extrabold text-white">00</div>
+                        <div class="text-xs uppercase text-slate-400 mt-1">Minut</div>
+                    </div>
+                    <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-800">
+                        <div id="seconds" class="text-3xl sm:text-4xl font-extrabold text-white text-neon-blue">00</div>
+                        <div class="text-xs uppercase text-slate-400 mt-1">Sekund</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="odkrycie" class="py-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">Kosmiczna Ciekawostka Dnia</h2>
+                <p class="text-slate-400">Losuj i poznawaj zadziwiające fakty o wszechświecie.</p>
+            </div>
+
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl relative overflow-hidden border border-neon-blue/30 shadow-2xl">
+                <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-neon-purple/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-16 -top-16 w-64 h-64 bg-neon-blue/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center space-x-3 mb-6 text-neon-blue">
+                        <i class="fa-solid fa-lightbulb text-2xl"></i>
+                        <span id="trivia-category" class="font-semibold uppercase tracking-wider text-sm">Astrophysics & Black Holes</span>
+                    </div>
+                    
+                    <p id="trivia-text" class="text-xl sm:text-2xl font-medium text-slate-100 leading-relaxed min-h-[90px] mb-8">
+                        Ładowanie fascynującego faktu o wszechświecie...
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800 pt-6">
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-info-circle mr-1"></i> Kliknij przycisk, aby wylosować kolejną ciekawostkę</span>
+                        <button id="trivia-btn" class="w-full sm:w-auto px-6 py-3 bg-neon-blue hover:bg-neon-blue/80 text-space-900 font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span>Losuj ciekawostkę</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="galeria" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">Galeria Mgławic i Galaktyk</h2>
+                <p class="text-slate-400">Najpiękniejsze obiekty głębokiego kosmosu uwiecznione przez teleskopy.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="glass-panel rounded-3xl overflow-hidden nebula-card border border-slate-800 flex flex-col group shadow-xl">
+                    <div class="relative h-64 overflow-hidden bg-slate-900">
+                        <img src="https://placehold.co/600x400/0f172a/38bdf8?text=Filary+Stworzenia" alt="Filary Stworzenia" class="w-full h-full object-cover nebula-img transition-transform duration-700 ease-out" onerror="this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Cosmic+Nebula'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-space-900 via-transparent opacity-80"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-space-900/80 backdrop-blur border border-slate-700 text-xs font-semibold text-neon-blue">
+                            6,500 lat świetlnych
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white group-hover:text-neon-blue transition-colors">Filary Stworzenia</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                Gigantyczne kolumny pyłu i gazu w Mgławicy Orła. Miejsce intensywnego powstawania nowych gwiazd, badane m.in. przez teleskop Jamesa Webba.
+                            </p>
+                        </div>
+                        <div class="flex items-center text-xs font-semibold text-neon-purple">
+                            <i class="fa-solid fa-telescope mr-2"></i> Obserwatorium: JWST & Hubble
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel rounded-3xl overflow-hidden nebula-card border border-slate-800 flex flex-col group shadow-xl">
+                    <div class="relative h-64 overflow-hidden bg-slate-900">
+                        <img src="https://placehold.co/600x400/0f172a/c084fc?text=Galaktyka+Andromeda" alt="Galaktyka Andromeda" class="w-full h-full object-cover nebula-img transition-transform duration-700 ease-out" onerror="this.src='https://placehold.co/600x400/0f172a/c084fc?text=Andromeda'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-space-900 via-transparent opacity-80"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-space-900/80 backdrop-blur border border-slate-700 text-xs font-semibold text-neon-purple">
+                            2.5 mln lat świetlnych
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white group-hover:text-neon-purple transition-colors">Galaktyka Andromeda (M31)</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                Najbliższa nam duża galaktyka spiralna. Zbliża się do Drogi Mlecznej z prędkością około 110 kilometrów na sekundę!
+                            </p>
+                        </div>
+                        <div class="flex items-center text-xs font-semibold text-neon-blue">
+                            <i class="fa-solid fa-telescope mr-2"></i> Typ: Galaktyka Spiralna
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel rounded-3xl overflow-hidden nebula-card border border-slate-800 flex flex-col group shadow-xl">
+                    <div class="relative h-64 overflow-hidden bg-slate-900">
+                        <img src="https://placehold.co/600x400/0f172a/facc15?text=Mgławica+Krab" alt="Mgławica Krab" class="w-full h-full object-cover nebula-img transition-transform duration-700 ease-out" onerror="this.src='https://placehold.co/600x400/0f172a/facc15?text=Crab+Nebula'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-space-900 via-transparent opacity-80"></div>
+                        <span class="absolute top-4 right-4 px-3 py-1 rounded-full bg-space-900/80 backdrop-blur border border-slate-700 text-xs font-semibold text-neon-gold">
+                            Pozostałość po supernowej
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold mb-2 text-white group-hover:text-neon-gold transition-colors">Mgławica Krab (M1)</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                Jasna mgławica i pozostałość po wybuchu supernowej, który chińscy astronomowie obserwowali na niebie w 1054 roku. W centrum kryje się pulsar.
+                            </p>
+                        </div>
+                        <div class="flex items-center text-xs font-semibold text-neon-gold">
+                            <i class="fa-solid fa-telescope mr-2"></i> Gwiazdozbiór: Byk
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="symulator" class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-slate-700 shadow-2xl relative">
+                <div class="text-center mb-10">
+                    <div class="inline-flex p-3 rounded-2xl bg-neon-blue/10 text-neon-blue mb-4">
+                        <i class="fa-solid fa-weight-scale text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-bold tracking-tight mb-2">Symulator Wagi Planetarnej</h2>
+                    <p class="text-slate-400">Sprawdź, ile ważyłbyś na różnych ciałach niebieskich w Układzie Słonecznym.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="weight-input" class="block text-sm font-medium text-slate-300 mb-2">Twoja waga na Ziemi (kg):</label>
+                            <input type="number" id="weight-input" min="1" max="500" value="70" class="w-full bg-space-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue transition-colors">
+                        </div>
+                        <div>
+                            <label for="planet-select" class="block text-sm font-medium text-slate-300 mb-2">Wybierz planetę / ciało niebieskie:</label>
+                            <select id="planet-select" class="w-full bg-space-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-neon-blue transition-colors">
+                                <option value="0.38">Merkury (grawitacja 0.38g)</option>
+                                <option value="0.91">Wenus (grawitacja 0.91g)</option>
+                                <option value="0.166">Księżyc (grawitacja 0.166g)</option>
+                                <option value="0.38" selected>Mars (grawitacja 0.38g)</option>
+                                <option value="2.34">Jowisz (grawitacja 2.34g)</option>
+                                <option value="1.06">Saturn (grawitacja 1.06g)</option>
+                                <option value="0.92">Uran (grawitacja 0.92g)</option>
+                                <option value="1.19">Neptun (grawitacja 1.19g)</option>
+                                <option value="0.06">Pluton (grawitacja 0.06g)</option>
+                            </select>
+                        </div>
+                        <button id="calc-btn" class="w-full py-3.5 bg-gradient-to-r from-neon-blue to-neon-purple text-space-900 font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity">
+                            Oblicz wagę
+                        </button>
+                    </div>
+
+                    <div class="bg-space-900/80 p-8 rounded-2xl border border-slate-800 text-center flex flex-col justify-center items-center h-full min-h-[250px]">
+                        <span class="text-xs uppercase tracking-widest text-slate-400 mb-2">Twoja waga na wybranym obiekcie:</span>
+                        <div id="result-weight" class="text-5xl sm:text-6xl font-extrabold text-neon-blue glow-text my-3">26.6 kg</div>
+                        <p id="planet-comment" class="text-sm text-slate-400 mt-2">Na Marsie poczułbyś się znacznie lżejszy i mógłbyś skakać wyżej!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="newsletter" class="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-neon-purple/30 shadow-2xl text-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-neon-purple/5 to-neon-blue/5 pointer-events-none"></div>
+                
+                <div class="relative z-10 max-w-xl mx-auto">
+                    <div class="w-12 h-12 rounded-2xl bg-neon-purple/10 text-neon-purple flex items-center justify-center mx-auto mb-6 text-xl">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </div>
+                    
+                    <h2 class="text-3xl font-bold tracking-tight mb-3">Dołącz do Biuletynu Miłośników Kosmosu</h2>
+                    <p class="text-slate-400 mb-8">Otrzymuj co tydzień zestawienie najciekawszych odkryć astronomicznych, powiadomienia o kometach i zaćmieniach bezpośrednio na swoją skrzynkę.</p>
+
+                    <form id="newsletter-form" class="space-y-4">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input type="email" id="newsletter-email" placeholder="Wpisz swój adres e-mail..." required class="flex-1 bg-space-900 border border-slate-700 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-neon-purple transition-colors">
+                            <button type="submit" class="px-8 py-4 bg-gradient-to-r from-neon-purple to-neon-blue text-space-900 font-bold rounded-xl shadow-lg hover:opacity-90 transition-opacity whitespace-nowrap">
+                                Zapisz się
+                            </button>
+                        </div>
+                        <div id="form-message" class="text-sm font-medium pt-2 hidden"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800 bg-space-900/90 py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-lg bg-neon-blue flex items-center justify-center text-space-900 font-bold">
+                    <i class="fa-solid fa-meteor text-xs"></i>
+                </div>
+                <span class="font-bold text-lg text-white">Galaktyczne Obserwatorium</span>
+            </div>
+            <p class="text-xs text-slate-500 text-center md:text-left">
+                &copy; 2026 AstroPortal. Wszelkie prawa zastrzeżone. Odkrywaj wszechświat z nami.
+            </p>
+            <div class="flex items-center space-x-4 text-slate-400">
+                <a href="#" class="hover:text-neon-blue transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="#" class="hover:text-neon-blue transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+                <a href="#" class="hover:text-neon-blue transition-colors"><i class="fa-brands fa-discord text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 2. Dynamic Starfield Canvas
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initStars();
+        });
+
+        let stars = [];
+        const numStars = Math.floor((width * height) / 4000);
+
+        function initStars() {
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 1.5,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.02 + 0.005
+                });
+            }
+        }
+
+        function animateStars() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = '#ffffff';
+            for (let star of stars) {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) {
+                    star.speed = -star.speed;
+                }
+                ctx.globalAlpha = Math.abs(star.alpha);
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(animateStars);
+        }
+        initStars();
+        animateStars();
+
+        // 3. Countdown Timer to Space Mission
+        // Set target date 45 days from now
+        const targetDate = new Date().getTime() + (45 * 24 * 60 * 60 * 1000);
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) return;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(days).padStart(2, '0');
+            document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // 4. Space Trivia Generator Widget
+        const triviaList = [
+            { category: "Czarne Dziury", text: "Gdybyś wpadł do czarnej dziury, zjawisko zwane 'spaghettifikacją' rozciągnąłoby Cię w długą, cienką nitkę z powodu ogromnej różnicy grawitacji między stopami a głową." },
+            { category: "Układ Słoneczny", text: "Na Wenus dzień (obrót wokół własnej osi) trwa dłużej niż rok (obieg wokół Słońca). Ponadto planeta ta obraca się w przeciwnym kierunku niż większość planet." },
+            { category: "Astrofizyka / Słońce", text: "Światło, które opuszcza powierzchnię Słońca, potrzebuje około 8 minut i 20 sekund, aby dotrzeć do Ziemi." },
+            { category: "Galaktyka", text: "W naszej galaktyce – Drodze Mlecznej – znajduje się więcej drzew na Ziemi niż gwiazd w całej galaktyce? Nie, odwrotnie! Gwiazd jest od 100 do 400 miliardów." },
+            { category: "Koszmos i Czas", text: "Dzięki teleskopowi Jamesa Webba możemy oglądać światło gwiazd, które wyemitowały je ponad 13 miliardów lat temu, co oznacza, że spoglądamy w przeszłość." }
+        ];
+
+        const triviaTextEl = document.getElementById('trivia-text');
+        const triviaCategoryEl = document.getElementById('trivia-category');
+        const triviaBtn = document.getElementById('trivia-btn');
+
+        function getRandomTrivia() {
+            const randomIndex = Math.floor(Math.random() * triviaList.length);
+            const item = triviaList[randomIndex];
+            triviaCategoryEl.innerText = item.category;
+            triviaTextEl.innerText = item.text;
+        }
+        triviaBtn.addEventListener('click', getRandomTrivia);
+        getRandomTrivia(); // Initial load
+
+        // 5. Planetary Weight Calculator Simulator
+        const weightInput = document.getElementById('weight-input');
+        const planetSelect = document.getElementById('planet-select');
+        const calcBtn = document.getElementById('calc-btn');
+        const resultWeightEl = document.getElementById('result-weight');
+        const planetCommentEl = document.getElementById('planet-comment');
+
+        const comments = {
+            "0.38": "Na Merkurym lub Marsie Twoja waga drastycznie spadłaby, ułatwiając dalekie skoki!",
+            "0.91": "Wenus ma bardzo podobną masę i grawitację do Ziemi – różnica jest niemal niezauważalna.",
+            "0.166": "Na Księżycu poczułbyś się jak piórko! Możesz tam skakać na wysokość kilku metrów.",
+            "2.34": "Jowisz to gigant gazowy – na jego powierzchni Twoje nogi uginałyby się pod ogromnym ciężarem.",
+            "1.06": "Saturn ma ogromną objętość, ale jego grawitacja powierzchniowa jest zbliżona do ziemskiej.",
+            "0.92": "Uran ma grawitację nieco mniejszą niż ziemska.",
+            "1.19": "Na Neptunie poczułbyś się nieco cięższy niż na Ziemi.",
+            "0.06": "Na małym Plutonie Twoja waga byłaby zaledwie ułamkiem kilograma!"
+        };
+
+        function calculateWeight() {
+            const weight = parseFloat(weightInput.value) || 0;
+            const multiplier = parseFloat(planetSelect.value);
+            const planetName = planetSelect.options[planetSelect.selectedIndex].text.split(' ')[0];
+            
+            const calculated = (weight * multiplier).toFixed(1);
+            resultWeightEl.innerText = `${calculated} kg`;
+            planetCommentEl.innerText = comments[multiplier] || `Oto Twoja waga na planecie ${planetName}.`;
+        }
+
+        calcBtn.addEventListener('click', calculateWeight);
+        weightInput.addEventListener('input', calculateWeight);
+        planetSelect.addEventListener('change', calculateWeight);
+        calculateWeight();
+
+        // 6. Newsletter Form Validation
+        const newsletterForm = document.getElementById('newsletter-form');
+        const newsletterEmail = document.getElementById('newsletter-email');
+        const formMessage = document.getElementById('form-message');
+
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = newsletterEmail.value.trim();
+            
+            if (email && email.includes('@') && email.includes('.')) {
+                formMessage.innerText = "Dziękujemy za zapisanie się do Biuletynu Kosmicznego! Sprawdź swoją skrzynkę mailową.";
+                formMessage.className = "text-sm font-medium pt-2 text-neon-blue block";
+                newsletterEmail.value = "";
+            } else {
+                formMessage.innerText = "Wprowadź poprawny adres e-mail.";
+                formMessage.className = "text-sm font-medium pt-2 text-red-400 block";
+            }
+        });
+    </script>
+</body>
+</html>
